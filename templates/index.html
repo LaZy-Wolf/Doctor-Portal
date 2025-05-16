@@ -1,0 +1,201 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Healthcare Portal</title>
+    <link rel="stylesheet" href="{% static 'css/styles.css' %}">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    {% csrf_token %}
+</head>
+<body>
+    <!-- User Selection Page -->
+    <div class="container" id="user-selection-page">
+        <div class="card">
+            <div class="card-header">
+                <h2>Welcome</h2>
+                <p>Please select your user type to continue</p>
+            </div>
+            <div class="card-content">
+                <button class="user-type-btn" data-type="doctor">
+                    <i class="fas fa-stethoscope"></i>
+                    <div>
+                        <span class="btn-title">Doctor</span>
+                        <span class="btn-desc">Login or register as a healthcare provider</span>
+                    </div>
+                </button>
+                <button class="user-type-btn" data-type="patient">
+                    <i class="fas fa-user"></i>
+                    <div>
+                        <span class="btn-title">Patient</span>
+                        <span class="btn-desc">Login or register as a patient</span>
+                    </div>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Auth Page -->
+    <div class="container hidden" id="auth-page">
+        <div class="card auth-card">
+            <div class="gradient-bar"></div>
+            <div class="card-header">
+                <div class="user-type-header">
+                    <i class="fas fa-user" id="user-icon"></i>
+                    <h2 id="portal-title">Patient Portal</h2>
+                </div>
+                <p id="auth-description">Sign in to your account</p>
+            </div>
+            <div class="card-content">
+                <div class="tabs">
+                    <button class="tab active" data-tab="signin">Sign In</button>
+                    <button class="tab" data-tab="signup">Sign Up</button>
+                </div>
+
+                <!-- Sign In Form -->
+                <div class="tab-content active" id="signin-content">
+                    <form id="signin-form" action="{% url 'signin' %}" method="post">
+                        {% csrf_token %}
+                        <input type="hidden" name="user_type" id="signin-user-type" value="patient">
+                        <div class="form-group">
+                            <label for="signin-username">Username</label>
+                            <input type="text" id="signin-username" name="username" placeholder="Enter your username" required>
+                            <span class="error-message"></span>
+                        </div>
+                        <div class="form-group">
+                            <label for="signin-password">Password</label>
+                            <input type="password" id="signin-password" name="password" placeholder="Enter your password" required>
+                            <span class="error-message"></span>
+                        </div>
+                        <button type="submit" class="submit-btn">
+                            <span class="btn-text">Sign In</span>
+                            <span class="spinner hidden"></span>
+                        </button>
+                        {% if messages %}
+                        <div class="message-container">
+                            {% for message in messages %}
+                            <div class="message {% if message.tags %}{{ message.tags }}{% endif %}">
+                                {{ message }}
+                            </div>
+                            {% endfor %}
+                        </div>
+                        {% endif %}
+                    </form>
+                </div>
+
+                <!-- Sign Up Form -->
+                <div class="tab-content" id="signup-content">
+                    <form id="signup-form" action="{% url 'signup' %}" method="post" enctype="multipart/form-data">
+                        {% csrf_token %}
+                        <input type="hidden" name="user_type" id="signup-user-type" value="patient">
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="firstName">First Name</label>
+                                <input type="text" id="firstName" name="firstName" placeholder="First name" required>
+                                <span class="error-message"></span>
+                            </div>
+                            <div class="form-group">
+                                <label for="lastName">Last Name</label>
+                                <input type="text" id="lastName" name="lastName" placeholder="Last name" required>
+                                <span class="error-message"></span>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label>Profile Picture</label>
+                            <div class="profile-pic-container">
+                                <div class="profile-preview">
+                                    <img src="{% static 'images/default-avatar.png' %}" alt="Profile preview" id="profile-preview-img">
+                                </div>
+                                <div class="profile-options">
+                                    <input type="file" id="profilePicture" name="profilePicture" accept="image/*" class="file-input">
+                                    <label for="profilePicture" class="file-label">Choose from device</label>
+                                    <button type="button" id="use-default" class="default-pic-btn">Use default</button>
+                                    <input type="hidden" name="use_default_pic" id="use-default-pic-input" value="true">
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="username">Username</label>
+                            <input type="text" id="username" name="username" placeholder="Choose a username" required>
+                            <span class="error-message"></span>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="email">Email</label>
+                            <input type="email" id="email" name="email" placeholder="Enter your email" required>
+                            <span class="error-message"></span>
+                        </div>
+
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="password1">Password</label>
+                                <input type="password" id="password1" name="password1" placeholder="Create a password" required>
+                                <span class="error-message"></span>
+                                <div class="password-strength-meter">
+                                    <div class="strength-bar"></div>
+                                    <span class="strength-text"></span>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="password2">Confirm Password</label>
+                                <input type="password" id="password2" name="password2" placeholder="Confirm password" required>
+                                <span class="error-message"></span>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="addressLine1">Address Line 1</label>
+                            <input type="text" id="addressLine1" name="addressLine1" placeholder="Street address" required>
+                            <span class="error-message"></span>
+                        </div>
+
+                        <div class="form-row three-col">
+                            <div class="form-group">
+                                <label for="city">City</label>
+                                <input type="text" id="city" name="city" placeholder="City" required>
+                                <span class="error-message"></span>
+                            </div>
+                            <div class="form-group">
+                                <label for="state">State</label>
+                                <input type="text" id="state" name="state" placeholder="State" required>
+                                <span class="error-message"></span>
+                            </div>
+                            <div class="form-group">
+                                <label for="pincode">Pincode</label>
+                                <input type="text" id="pincode" name="pincode" placeholder="Pincode" required>
+                                <span class="error-message"></span>
+                            </div>
+                        </div>
+
+                        <button type="submit" class="submit-btn">
+                            <span class="btn-text">Sign Up</span>
+                            <span class="spinner hidden"></span>
+                        </button>
+                        {% if form.errors %}
+                        <div class="message-container">
+                            {% for field, errors in form.errors.items %}
+                            {% for error in errors %}
+                            <div class="message error">{{ error }}</div>
+                            {% endfor %}
+                            {% endfor %}
+                        </div>
+                        {% endif %}
+                    </form>
+                </div>
+            </div>
+            <div class="card-footer">
+                <a href="#" id="back-to-selection">Back to user selection</a>
+            </div>
+        </div>
+    </div>
+
+    <script src="{% static 'js/script.js' %}"></script>
+</body>
+</html>

@@ -1,0 +1,54 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<div class="dashboard-container">
+    <div class="dashboard-header">
+        <h1 class="dashboard-title">Patient Dashboard</h1>
+        <a href="{% url 'logout' %}" class="logout-btn">
+            <i class="fas fa-sign-out-alt"></i> Logout
+        </a>
+    </div>
+    
+    <div class="user-info-card">
+        <div class="user-info-header">
+            <div class="user-avatar">
+                {% if user_profile.profile_picture %}
+                    <img src="{{ user_profile.profile_picture.url }}" alt="Profile picture">
+                {% else %}
+                    <img src="{% static 'images/default-avatar.png' %}" alt="Default profile picture">
+                {% endif %}
+            </div>
+            <div>
+                <div class="user-name">{{ user_profile.get_full_name }}</div>
+                <div class="user-type">Patient</div>
+            </div>
+        </div>
+        
+        <div class="user-info-content">
+            <div class="info-row">
+                <div class="info-group">
+                    <div class="info-label">Username</div>
+                    <div class="info-value">{{ user.username }}</div>
+                </div>
+                <div class="info-group">
+                    <div class="info-label">Email</div>
+                    <div class="info-value">{{ user.email }}</div>
+                </div>
+            </div>
+            
+            <div class="info-group">
+                <div class="info-label">Address</div>
+                <div class="info-value">{{ user_profile.get_full_address }}</div>
+            </div>
+            
+            <div class="info-row">
+                <div class="info-group">
+                    <div class="info-label">Account Created</div>
+                    <div class="info-value">{{ user_profile.created_at|date:"F j, Y" }}</div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
