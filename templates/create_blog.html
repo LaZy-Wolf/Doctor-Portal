@@ -4,6 +4,251 @@
 {% block title %}Create Blog Post{% endblock %}
 
 {% block content %}
+<style>
+    /* Form container styling */
+    .container {
+        max-width: 900px;
+        margin: 0 auto;
+        padding: 20px;
+    }
+
+    .max-width-lg {
+        max-width: 100%;
+    }
+
+    /* Card styling for the form */
+    .card {
+        background: #ffffff;
+        border-radius: 12px;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        overflow: hidden;
+        margin-bottom: 20px;
+    }
+
+    .card-header {
+        background: linear-gradient(90deg, #4a90e2, #50c9c3);
+        padding: 15px 20px;
+        color: white;
+    }
+
+    .card-header h2 {
+        margin: 0;
+        font-size: 1.5rem;
+        font-weight: 600;
+    }
+
+    .gradient-bar {
+        height: 4px;
+        background: linear-gradient(90deg, #ff6f61, #ffb347);
+        margin-top: 10px;
+    }
+
+    .card-body {
+        padding: 25px;
+    }
+
+    /* Form group and label styling */
+    .form-group {
+        margin-bottom: 20px;
+    }
+
+    .form-label {
+        display: block;
+        font-weight: 500;
+        color: #333;
+        margin-bottom: 8px;
+        font-size: 1rem;
+    }
+
+    /* Input, select, and textarea styling */
+    .form-input,
+    .form-select,
+    .form-textarea {
+        width: 100%;
+        padding: 12px 15px;
+        border: 1px solid #ddd;
+        border-radius: 8px;
+        font-size: 1rem;
+        color: #333;
+        background-color: #f9f9f9;
+        transition: border-color 0.3s, box-shadow 0.3s;
+    }
+
+    .form-input:focus,
+    .form-select:focus,
+    .form-textarea:focus {
+        outline: none;
+        border-color: #4a90e2;
+        box-shadow: 0 0 5px rgba(74, 144, 226, 0.3);
+        background-color: #fff;
+    }
+
+    .form-input:hover,
+    .form-select:hover,
+    .form-textarea:hover {
+        border-color: #4a90e2;
+    }
+
+    .form-textarea {
+        resize: vertical;
+        min-height: 80px;
+    }
+
+    /* Image upload styling */
+    .image-upload {
+        display: flex;
+        align-items: center;
+        gap: 20px;
+    }
+
+    .image-preview {
+        width: 100px;
+        height: 100px;
+        border: 1px solid #ddd;
+        border-radius: 8px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: #f0f0f0;
+        overflow: hidden;
+    }
+
+    .image-preview img,
+    .image-preview svg {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        color: #999;
+    }
+
+    .file-input-container {
+        flex: 1;
+    }
+
+    .file-input {
+        display: none;
+    }
+
+    .file-label {
+        display: inline-block;
+        padding: 10px 20px;
+        background: #4a90e2;
+        color: white;
+        border-radius: 8px;
+        cursor: pointer;
+        font-size: 0.9rem;
+        transition: background 0.3s;
+    }
+
+    .file-label:hover {
+        background: #357abd;
+    }
+
+    .file-hint {
+        margin-top: 5px;
+        font-size: 0.85rem;
+        color: #666;
+    }
+
+    /* Checkbox styling */
+    .checkbox-group {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+    }
+
+    .form-checkbox {
+        width: 18px;
+        height: 18px;
+        accent-color: #4a90e2;
+    }
+
+    /* Error message styling */
+    .error-message {
+        display: block;
+        color: #e53e3e;
+        font-size: 0.85rem;
+        margin-top: 5px;
+    }
+
+    /* Form actions (buttons) */
+    .form-actions {
+        display: flex;
+        gap: 15px;
+        justify-content: flex-end;
+        margin-top: 30px;
+    }
+
+    .btn {
+        padding: 12px 25px;
+        border: none;
+        border-radius: 8px;
+        font-size: 1rem;
+        cursor: pointer;
+        transition: background 0.3s, transform 0.1s;
+    }
+
+    .btn-secondary {
+        background: #e2e8f0;
+        color: #333;
+    }
+
+    .btn-secondary:hover {
+        background: #cbd5e1;
+        transform: translateY(-1px);
+    }
+
+    .btn-primary {
+        background: #4a90e2;
+        color: white;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+    }
+
+    .btn-primary:hover {
+        background: #357abd;
+        transform: translateY(-1px);
+    }
+
+    .btn-primary.loading .spinner {
+        display: inline-block;
+        width: 16px;
+        height: 16px;
+        border: 2px solid white;
+        border-top: 2px solid transparent;
+        border-radius: 50%;
+        animation: spin 0.8s linear infinite;
+    }
+
+    @keyframes spin {
+        to {
+            transform: rotate(360deg);
+        }
+    }
+
+    /* Messages */
+    .message-container {
+        margin-bottom: 20px;
+    }
+
+    .message {
+        padding: 10px 15px;
+        border-radius: 8px;
+        font-size: 0.9rem;
+    }
+
+    .message.error {
+        background: #fee2e2;
+        color: #e53e3e;
+    }
+
+    .message.success {
+        background: #d1fae5;
+        color: #065f46;
+    }
+</style>
+
 <main class="container">
     <div class="max-width-lg">
         <h1>Create Blog Post</h1>
@@ -39,13 +284,13 @@
                 <form id="blog-form" action="{% url 'create_blog' %}" method="post" enctype="multipart/form-data">
                     {% csrf_token %}
                     <div class="form-group">
-                        <label for="title" class="form-label">Title</label>
-                        <input type="text" id="title" name="title" class="form-input" placeholder="Enter blog title" value="{{ blog_form.title.value|default:'' }}" required>
+                        <label for="id_title" class="form-label">Title</label>
+                        {{ blog_form.title }}
                         <span class="error-message"></span>
                     </div>
 
                     <div class="form-group">
-                        <label for="image" class="form-label">Featured Image</label>
+                        <label for="id_image" class="form-label">Featured Image</label>
                         <div class="image-upload">
                             <div class="image-preview">
                                 {% if blog_form.image.value %}
@@ -57,49 +302,42 @@
                                 {% endif %}
                             </div>
                             <div class="file-input-container">
-                                <input type="file" id="image" name="image" class="file-input" accept="image/*">
-                                <label for="image" class="file-label">Choose File</label>
-                                <p class="file-hint">JPG, PNG or GIF, Maximum 2MB</p>
+                                {{ blog_form.image }}
+                                <label for="id_image" class="file-label">Choose File</label>
+                                <p class="file-hint">JPG, PNG, or GIF, Maximum 2MB</p>
                                 <span class="error-message"></span>
                             </div>
                         </div>
                     </div>
 
                     <div class="form-group">
-                        <label for="category" class="form-label">Category</label>
-                        <select id="category" name="category" class="form-select" required>
-                            <option value="">Select a category</option>
-                            {% for category in blog_form.category.field.queryset %}
-                            <option value="{{ category.id }}" {% if blog_form.category.value == category.id %}selected{% endif %}>
-                                {{ category.name }}
-                            </option>
-                            {% endfor %}
-                        </select>
+                        <label for="id_category" class="form-label">Category</label>
+                        {{ blog_form.category }}
                         <span class="error-message"></span>
                     </div>
 
                     <div class="form-group">
-                        <label for="summary" class="form-label">Summary</label>
-                        <textarea id="summary" name="summary" rows="3" class="form-textarea" placeholder="Brief summary of the blog post" required>{{ blog_form.summary.value|default:'' }}</textarea>
+                        <label for="id_summary" class="form-label">Summary</label>
+                        {{ blog_form.summary }}
                         <span class="error-message"></span>
                     </div>
 
                     <div class="form-group">
-                        <label for="content" class="form-label">Content</label>
-                        <textarea id="content" name="content" rows="8" class="form-textarea" placeholder="Write your blog content here..." required>{{ blog_form.content.value|default:'' }}</textarea>
+                        <label for="id_content" class="form-label">Content</label>
+                        {{ blog_form.content }}
                         <span class="error-message"></span>
                     </div>
 
                     <div class="form-group checkbox-group">
-                        <input type="checkbox" id="is_draft" name="is_draft" class="form-checkbox" {% if blog_form.is_draft.value %}checked{% endif %}>
-                        <label for="is_draft" class="form-label" style="margin-bottom: 0;">Save as draft</label>
+                        {{ blog_form.is_draft }}
+                        <label for="id_is_draft" class="form-label" style="margin-bottom: 0;">Save as Draft (uncheck to publish)</label>
                         <span class="error-message"></span>
                     </div>
 
                     <div class="form-actions">
                         <a href="{% url 'doctor_dashboard' %}" class="btn btn-secondary">Cancel</a>
                         <button type="submit" class="btn btn-primary">
-                            <span class="btn-text">Publish Blog</span>
+                            <span class="btn-text">Save Blog</span>
                             <span class="spinner hidden"></span>
                         </button>
                     </div>

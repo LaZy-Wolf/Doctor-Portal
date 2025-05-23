@@ -120,14 +120,19 @@ def create_blog(request):
         return redirect('patient_dashboard')
     
     if request.method == 'POST':
+        print("POST request received")  # Debug
         form = BlogPostForm(request.POST, request.FILES)
+        print("Form data:", form.data)  # Debug
         if form.is_valid():
+            print("Form is valid")  # Debug
             blog_post = form.save(commit=False)
             blog_post.author = request.user
             blog_post.save()
+            print("Blog post saved:", blog_post.title)  # Debug
             messages.success(request, 'Blog post created successfully!')
             return redirect('view_blogs')
         else:
+            print("Form errors:", form.errors)  # Debug
             messages.error(request, 'Please correct the errors in the form.')
     else:
         form = BlogPostForm()

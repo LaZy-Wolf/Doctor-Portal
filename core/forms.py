@@ -76,6 +76,10 @@ class BlogPostForm(forms.ModelForm):
         model = BlogPost
         fields = ['title', 'category', 'summary', 'content', 'image', 'is_draft']
         widgets = {
-            'content': forms.Textarea(attrs={'rows': 10}),
-            'summary': forms.Textarea(attrs={'rows': 4}),
+            'title': forms.TextInput(attrs={'class': 'form-input', 'placeholder': 'Enter blog title', 'required': 'required'}),
+            'category': forms.Select(attrs={'class': 'form-select', 'required': 'required'}),
+            'summary': forms.Textarea(attrs={'class': 'form-textarea', 'rows': 4, 'placeholder': 'Brief summary of the blog post', 'required': 'required'}),
+            'content': forms.Textarea(attrs={'class': 'form-textarea', 'rows': 10, 'placeholder': 'Write your blog content here...', 'required': 'required'}),
+            'image': forms.FileInput(attrs={'class': 'file-input', 'accept': 'image/*'}),
+            'is_draft': forms.CheckboxInput(attrs={'class': 'form-checkbox'}),
         }

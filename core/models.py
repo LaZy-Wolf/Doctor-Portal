@@ -26,3 +26,22 @@ class UserProfile(models.Model):
     
     def get_full_address(self):
         return f"{self.address_line1}, {self.city}, {self.state} - {self.pincode}"
+
+class Category(models.Model):
+    name = models.CharField(max_length=100, unique=True)
+    
+    def __str__(self):
+        return self.name
+
+class BlogPost(models.Model):
+    author = models.ForeignKey(User, on_delete=models.CASCADE)
+    title = models.CharField(max_length=200)
+    image = models.ImageField(upload_to='blog_images/', blank=True, null=True)
+    category = models.ForeignKey(Category, on_delete=models.SET_NULL, null=True)
+    summary = models.TextField()
+    content = models.TextField()
+    is_draft = models.BooleanField(default=False)
+    created_at = models.DateTimeField(auto_now_add=True)
+    
+    def __str__(self):
+        return self.title
