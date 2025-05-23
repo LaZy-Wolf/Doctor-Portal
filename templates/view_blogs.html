@@ -1,0 +1,78 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}View Blogs{% endblock %}
+
+{% block content %}
+<main class="container">
+    <h1>Blog Posts</h1>
+
+    {% if user.userprofile.user_type == 'doctor' %}
+        <div class="category-section">
+            <h2 class="category-title">Your Blog Posts</h2>
+            {% if blog_posts %}
+            <div class="blog-grid">
+                {% for post in blog_posts %}
+                <div class="blog-card">
+                    <div class="blog-image-container">
+                        {% if post.image %}
+                        <img src="{{ post.image.url }}" alt="{{ post.title }}" class="blog-image">
+                        {% else %}
+                        <img src="{% static 'images/default-blog.png' %}" alt="Default Blog Image" class="blog-image">
+                        {% endif %}
+                        <div class="blog-status {% if post.is_draft %}status-draft{% else %}status-published{% endif %}">
+                            {% if post.is_draft %}Draft{% else %}Published{% endif %}
+                        </div>
+                    </div>
+                    <div class="blog-content">
+                        <span class="blog-category category-{{ post.category.name|slugify }}">{{ post.category.name }}</span>
+                        <h3 class="blog-title">{{ post.title }}</h3>
+                        <p class="blog-summary">{{ post.summary|truncatewords:15 }}</p>
+                        <div class="blog-footer">
+                            <span class="blog-date">{{ post.created_at|date:"M d, Y" }}</span>
+                            <a href="{% url 'blog_detail' post.id %}" class="blog-link">Read More →</a>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+            {% else %}
+            <p>No blog posts yet.</p>
+            {% endif %}
+        </div>
+    {% else %}
+        {% for category, posts in blogs_by_category.items %}
+        <div class="category-section">
+            <h2 class="category-title">{{ category.name }}</h2>
+            {% if posts %}
+            <div class="blog-grid">
+                {% for post in posts %}
+                <div class="blog-card">
+                    <div class="blog-image-container">
+                        {% if post.image %}
+                        <img src="{{ post.image.url }}" alt="{{ post.title }}" class="blog-image">
+                        {% else %}
+                        <img src="{% static 'images/default-blog.png' %}" alt="Default Blog Image" class="blog-image">
+                        {% endif %}
+                        <div class="blog-status status-published">Published</div>
+                    </div>
+                    <div class="blog-content">
+                        <span class="blog-category category-{{ category.name|slugify }}">{{ category.name }}</span>
+                        <h3 class="blog-title">{{ post.title }}</h3>
+                        <p class="blog-summary">{{ post.summary|truncatewords:15 }}</p>
+                        <div class="blog-footer">
+                            <span class="blog-date">{{ post.created_at|date:"M d, Y" }}</span>
+                            <a href="{% url 'blog_detail' post.id %}" class="blog-link">Read More →</a>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+            {% else %}
+            <p>No posts available in this category.</p>
+            {% endif %}
+        </div>
+        {% endfor %}
+    {% endif %}
+</main>
+{% endblock %}

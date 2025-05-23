@@ -4,15 +4,42 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Healthcare Portal</title>
+    <title>{% block title %}Healthcare Portal{% endblock %}</title>
+    {% block css %}
+    {% if not user.is_authenticated %}
+    <link rel="stylesheet" href="{% static 'css/auth_styles.css' %}">
+    {% else %}
     <link rel="stylesheet" href="{% static 'css/styles.css' %}">
+    {% endif %}
+    {% endblock %}
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     {% csrf_token %}
 </head>
-<body>
-    {% block content %}{% endblock %}
+<body class="{% block body_class %}{% endblock %}">
+    {% if user.is_authenticated %}
+    {% include 'navbar.html' %}
+    {% endif %}
+    <div class="{% block container_class %}container{% endblock %}">
+        {% if messages %}
+        <div class="message-container">
+            {% for message in messages %}
+            <div class="message {% if message.tags %}{{ message.tags }}{% endif %}">
+                {{ message }}
+            </div>
+            {% endfor %}
+        </div>
+        {% endif %}
+        {% block content %}{% endblock %}
+    </div>
+    {% block js %}
+    {% if not user.is_authenticated %}
+    <script src="{% static 'js/auth_script.js' %}"></script>
+    {% else %}
+    <script src="{% static 'js/script.js' %}"></script>
+    {% endif %}
+    {% endblock %}
 </body>
 </html>

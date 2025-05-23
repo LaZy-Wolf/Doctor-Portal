@@ -1,54 +1,49 @@
 {% extends 'base.html' %}
 {% load static %}
 
+{% block title %}Doctor Dashboard{% endblock %}
+
 {% block content %}
-<div class="dashboard-container">
-    <div class="dashboard-header">
-        <h1 class="dashboard-title">Doctor Dashboard</h1>
-        <a href="{% url 'logout' %}" class="logout-btn">
-            <i class="fas fa-sign-out-alt"></i> Logout
-        </a>
-    </div>
-    
-    <div class="user-info-card">
-        <div class="user-info-header">
-            <div class="user-avatar">
+<main class="container">
+    <div class="max-width-md">
+        <h1>Dashboard</h1>
+
+        <div class="card">
+            <div class="gradient-header"></div>
+            <div class="avatar-container">
                 {% if user_profile.profile_picture %}
-                    <img src="{{ user_profile.profile_picture.url }}" alt="Profile picture">
+                <img src="{{ user_profile.profile_picture.url }}" alt="Profile picture" class="avatar">
                 {% else %}
-                    <img src="{% static 'images/default-avatar.png' %}" alt="Default profile picture">
+                <img src="{% static 'images/default-avatar.png' %}" alt="Default profile picture" class="avatar">
                 {% endif %}
             </div>
-            <div>
-                <div class="user-name">{{ user_profile.get_full_name }}</div>
-                <div class="user-type">Doctor</div>
-            </div>
-        </div>
-        
-        <div class="user-info-content">
-            <div class="info-row">
-                <div class="info-group">
+            <div class="card-body">
+                <div class="user-info">
+                    <h2 class="user-name">{{ user_profile.get_full_name }}</h2>
+                    <p class="user-title">Doctor</p>
+                </div>
+
+                <div class="info-row">
                     <div class="info-label">Username</div>
                     <div class="info-value">{{ user.username }}</div>
                 </div>
-                <div class="info-group">
+
+                <div class="info-row">
                     <div class="info-label">Email</div>
                     <div class="info-value">{{ user.email }}</div>
                 </div>
-            </div>
-            
-            <div class="info-group">
-                <div class="info-label">Address</div>
-                <div class="info-value">{{ user_profile.get_full_address }}</div>
-            </div>
-            
-            <div class="info-row">
-                <div class="info-group">
+
+                <div class="info-row">
+                    <div class="info-label">Address</div>
+                    <div class="info-value">{{ user_profile.get_full_address }}</div>
+                </div>
+
+                <div class="info-row">
                     <div class="info-label">Account Created</div>
                     <div class="info-value">{{ user_profile.created_at|date:"F j, Y" }}</div>
                 </div>
             </div>
         </div>
     </div>
-</div>
+</main>
 {% endblock %}

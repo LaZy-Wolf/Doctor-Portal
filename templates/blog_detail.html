@@ -1,0 +1,29 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}{{ post.title }}{% endblock %}
+
+{% block content %}
+<main class="container">
+    <div class="blog-detail">
+        <h1>{{ post.title }}</h1>
+        <div class="meta">
+            <span>By {{ post.author.get_full_name|default:post.author.username }}</span> | 
+            <span>{{ post.created_at|date:"F j, Y" }}</span> | 
+            <span>{{ post.category.name }}</span>
+            {% if post.is_draft %}
+            <span>| Draft</span>
+            {% endif %}
+        </div>
+        {% if post.image %}
+        <img src="{{ post.image.url }}" alt="{{ post.title }}">
+        {% endif %}
+        <div class="content">
+            {{ post.content|linebreaks }}
+        </div>
+        <div class="button-container">
+            <a href="{% url 'view_blogs' %}" class="btn btn-secondary">Back to Blogs</a>
+        </div>
+    </div>
+</main>
+{% endblock %}
